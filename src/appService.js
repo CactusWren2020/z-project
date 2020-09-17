@@ -36,7 +36,6 @@ export default new class AppService {
     }
 
     savePost = (post) => {
-       ;
         return firebase.database().ref("posts").push({
             title: post.title,
             slug: this.getNewSlugFromTitle(post.title),

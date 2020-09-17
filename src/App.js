@@ -9,7 +9,7 @@
  import Message from "./components/Message";
  import SimpleStorage from "react-simple-storage";
  import Login from "./components/Login";
- import firebase from "./firebase";
+//  import firebase from "./firebase";
 
  class App extends Component {
    state = {

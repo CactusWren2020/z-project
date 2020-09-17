@@ -125,6 +125,14 @@
   text-decoration: underline;  
 }
 
-  .App button.linkLike:hover {
+  .App button.linkLike:hover, button.header:hover {
      cursor: pointer;
   }
+
+.App button.header {
+  background-color:  #353944;
+  border: none;
+  font-size: inherit;
+  color: white;
+  text-decoration: underline;
+}

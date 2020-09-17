@@ -18,79 +18,81 @@
      message: null
    }
    componentDidMount() {
-     const postsRef = firebase.database().ref("posts");
-     postsRef.on("value", snapshot => {
-       const posts = snapshot.val();
-       const newStatePosts = [];
-       for (let post in posts) {
-         newStatePosts.push({
-           key: post,
-           slug: posts[post].slug,
-           title: posts[post].title,
-           content: posts[post].content
-         });
-       }  
-       this.setState({ posts: newStatePosts });
-     });
-   }
+     this.props.appService
+     .subscribeToPosts(posts => this.setState({
+       posts
+     }));
+    }
+  //    const postsRef = firebase.database().ref("posts");
+  //    postsRef.on("value", snapshot => {
+  //      const posts = snapshot.val();
+  //      const newStatePosts = [];
+  //      for (let post in posts) {
+  //        newStatePosts.push({
+  //          key: post,
+  //          slug: posts[post].slug,
+  //          title: posts[post].title,
+  //          content: posts[post].content
+  //        });
+  //      }  
+  //      this.setState({ posts: newStatePosts });
+  //    });
+  //  }
    onLogin = (email, password) => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(user => {
-        this.setState( {isAuthenticated: true} )
-      })
-      .catch(error => console.error(error)); 
-   }
+     this.props.appService
+     .login(email, password)
+     .then(user => {
+       this.setState({ isAuthenticated: true });
+     })
+     .catch(error => console.error(error));
+     }
+    
    onLogout = () => {
-     firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        this.setState( {isAuthenticated: false });
-      })
-      .catch(error => console.error(error))
+     this.props.appService
+     .logout()
+     .then(user => {
+       this.setState({ isAuthenticated: false });
+     })
+     .catch(error => console.error(error));
    }
-   getNewSlugFromTitle = (title) => 
-    encodeURIComponent(title.toLowerCase().split(" ").join("-"));
 
-   addNewPost = (post) => {
-     const postsRef = firebase.database().ref("posts");
-     post.slug = this.getNewSlugFromTitle(post.title);
-     delete post.key;
-     postsRef.push(post);
-    this.setState({ 
-      message: "saved" 
-    });
-    setTimeout(() =>
-      this.setState({message: null}), 
-      1500)
+   addNewPost = post => {
+     this.props.appService
+     .savePost(post);
+      this.displayMessage("saved");
+      
+    //  const postsRef = firebase.database().ref("posts");
+    //  post.slug = this.getNewSlugFromTitle(post.title);
+    //  delete post.key;
+    //  postsRef.push(post);
+    //  this.displayMessage("saved");
+   }
+   displayMessage = type => {
+     this.setState( { message: type} );
+     setTimeout(() => this.setState( {message: null} ), 1600);
    }
    updatePost = post => {
-    const postRef = firebase.database().ref("posts/" + post.key);
-    postRef.update({
-      slug: this.getNewSlugFromTitle(post.title),
-      title: post.title,
-      content: post.content
-    });
-     this.setState(
-       {message: "updated"}
-     );
-     setTimeout(() => {
-       this.setState({ message: null });
-      }, 1600);
+     this.props.appService
+     .updatePost(post);
+     this.displayMessage("updated");
+    // const postRef = firebase.database().ref("posts/" + post.key);
+    // postRef.update({
+    //   slug: this.getNewSlugFromTitle(post.title),
+    //   title: post.title,
+    //   content: post.content
+    // });
+    //   this.displayMessage("updated");
     }
     deletePost = post => {
       if (window.confirm("Delete this post?")) {
-        const postRef = firebase.database().ref("posts/" + post.key);
-        postRef.remove();
-        this.setState({ message: "deleted" });
-          setTimeout(() => {
-            this.setState({ message: null});
-          }, 1600);
-        } 
+        this.props.appService
+        .deletePost(post);
+        this.displayMessage("deleted");
+        // const postRef = firebase.database().ref("posts/" + post.key);
+        // postRef.remove();
+        // this.displayMessage("deleted"); 
       }
-    
+    }
    render() {
      return (
        <Router>

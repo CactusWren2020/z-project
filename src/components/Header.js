@@ -15,7 +15,7 @@ const Header = ( {isAuthenticated, onLogout }) => {
                 </li>
                 <li key="logout">
                     <button 
-                        className="linkLike"
+                        className="header"
                         onClick={e => {
                             e.preventDefault();
                             onLogout();

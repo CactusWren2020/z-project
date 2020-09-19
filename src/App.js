@@ -118,18 +118,10 @@
                         key: null,
                         slug: "",
                         title: "",
-                        content: ""
+                        content: "",
+                        fileName: ""
                       }
                     })
-                    // this.state.isAuthenticated ? (
-                    // <PostForm addNewPost={this.addNewPost}
-                    //   post={{
-                    //     key: null,
-                    //     slug: "",
-                    //     title: "", content: ""}}
-                    //     /> 
-                    // ) : 
-                    // <Redirect to="/login"/>
                   )}
                 />
                 <Route

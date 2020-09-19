@@ -19,7 +19,8 @@ export default new class AppService {
                     key: post,
                     slug: posts[post].slug,
                     title: posts[post].title,
-                    content: posts[post].content
+                    content: posts[post].content,
+                    fileName: posts[post].fileName
                 });
             }
             callback(newStatePosts)
@@ -39,7 +40,8 @@ export default new class AppService {
         return firebase.database().ref("posts").push({
             title: post.title,
             slug: this.getNewSlugFromTitle(post.title),
-            content: post.content
+            content: post.content,
+            fileName: post.fileName
         })
     }
 
@@ -51,7 +53,8 @@ export default new class AppService {
         return firebase.database().ref(`posts/${post.key}`).update({
             title: post.title,
             slug: this.getNewSlugFromTitle(post.title),
-            content: post.content
+            content: post.content,
+            fileName: post.fileName
         })
     }
 }()

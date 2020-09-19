@@ -16,6 +16,7 @@ const Post = ({ post }) => {
                         __html: contentHTML
                     }}
                 />
+                {post.fileName && <img src={post.fileName} alt={post.title} />}
             </article>
           
             

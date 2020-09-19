@@ -159,6 +159,7 @@ input[type="file"] {
 } 
 .file-upload:active::before {  
 }
-.img {
-  max-width: 500px;
+img {
+  max-width: 100%;
+  display: block;
 }

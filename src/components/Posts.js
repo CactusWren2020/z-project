@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+  
 
 const Posts = ({posts, deletePost, isAuthenticated}) => {
     return (
         <article className="posts container">
+            
+
+            <img src={process.env.PUBLIC_URL + "nitro.webp"}/>
             <h1>Posts</h1>
             <ul>
                 {posts.length < 1 && (<li key="empty">No posts!</li>)}

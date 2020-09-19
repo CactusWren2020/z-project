@@ -98,7 +98,7 @@
     padding: .5rem 0;
   }
 
-  .App form input#form-title {
+  .App form input#form-title{
     min-width: calc(100% - 20px);
     padding: 10px;
     font-size: 1rem;
@@ -135,4 +135,30 @@
   font-size: inherit;
   color: white;
   text-decoration: underline;
+}
+
+.file-upload::before {
+  content: 'Upload a Pic';
+  display: inline-block;
+  border: 1px solid #ccc;
+  padding: .5rem 1rem;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.file-upload::-webkit-file-upload-button {
+  visibility: hidden;
+}
+input[type="file"] {
+  /* visibility: hidden; */
+} 
+.file-upload:active::before {  
+}
+.img {
+  max-width: 500px;
 }

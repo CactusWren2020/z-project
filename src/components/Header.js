@@ -31,7 +31,12 @@ const Header = ( {isAuthenticated, onLogout }) => {
                     <Link to="/login">Login</Link>
                 </li>
                 )
-                }
+            }
+            {!isAuthenticated && (  
+            <li key="newUser">
+                <Link to="/newUser">Sign Up!</Link>
+            </li> 
+        )}
             </ul>
         </header>    
     );

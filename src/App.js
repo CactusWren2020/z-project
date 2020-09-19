@@ -9,13 +9,16 @@
  import Message from "./components/Message";
  import SimpleStorage from "react-simple-storage";
  import Login from "./components/Login";
-//  import firebase from "./firebase";
+ import NewUser from "./components/NewUser";
+ import firebase from "firebase";
 
  class App extends Component {
    state = {
      isAuthenticated: false,
      posts: [],
-     message: null
+     message: null,
+     username: "",
+     password: ""
    }
    componentDidMount() {
      this.props.appService
@@ -23,21 +26,6 @@
        posts
      }));
     }
-  //    const postsRef = firebase.database().ref("posts");
-  //    postsRef.on("value", snapshot => {
-  //      const posts = snapshot.val();
-  //      const newStatePosts = [];
-  //      for (let post in posts) {
-  //        newStatePosts.push({
-  //          key: post,
-  //          slug: posts[post].slug,
-  //          title: posts[post].title,
-  //          content: posts[post].content
-  //        });
-  //      }  
-  //      this.setState({ posts: newStatePosts });
-  //    });
-  //  }
    onLogin = (email, password) => {
      this.props.appService
      .login(email, password)
@@ -46,7 +34,6 @@
      })
      .catch(error => console.error(error));
      }
-    
    onLogout = () => {
      this.props.appService
      .logout()
@@ -55,17 +42,10 @@
      })
      .catch(error => console.error(error));
    }
-
    addNewPost = post => {
      this.props.appService
      .savePost(post);
       this.displayMessage("saved");
-      
-    //  const postsRef = firebase.database().ref("posts");
-    //  post.slug = this.getNewSlugFromTitle(post.title);
-    //  delete post.key;
-    //  postsRef.push(post);
-    //  this.displayMessage("saved");
    }
    displayMessage = type => {
      this.setState( { message: type} );
@@ -75,24 +55,28 @@
      this.props.appService
      .updatePost(post);
      this.displayMessage("updated");
-    // const postRef = firebase.database().ref("posts/" + post.key);
-    // postRef.update({
-    //   slug: this.getNewSlugFromTitle(post.title),
-    //   title: post.title,
-    //   content: post.content
-    // });
-    //   this.displayMessage("updated");
     }
     deletePost = post => {
       if (window.confirm("Delete this post?")) {
         this.props.appService
         .deletePost(post);
         this.displayMessage("deleted");
-        // const postRef = firebase.database().ref("posts/" + post.key);
-        // postRef.remove();
-        // this.displayMessage("deleted"); 
       }
     }
+    createNewUser = (username, password, e) => {
+      e.preventDefault();
+      firebase.auth().createUserWithEmailAndPassword(username, password)
+      .catch(error => console.error(error));
+      this.displayMessage("userCreated");
+      return <Redirect to="/" />;
+    };
+    
+    renderAuthRoute = (Component, props) => 
+      this.state.isAuthenticated ? (
+        <Component {...props} /> 
+      ) : 
+      <Redirect to="/" />; 
+    
    render() {
      return (
        <Router>
@@ -121,44 +105,65 @@
                 />
                 <Route
                   exact path="/login"
-                  render={() => 
-                    !this.state.isAuthenticated ? ( 
-                     <Login onLogin={this.onLogin}/>
-                    ) : 
-                    <Redirect to="/"/>   
-                  }  
+                  render={ () => 
+                     <Login onLogin={this.onLogin} />
+                  }
                 />
-                <Route
+                <Route //note current code redirects to "/", not login
                   exact path="/new"
                   render={() => (
-                    this.state.isAuthenticated ? (
-                    <PostForm addNewPost={this.addNewPost}
-                      post={{
+                    this.renderAuthRoute(PostForm, {
+                      addNewPost: this.addNewPost,
+                      post: {
                         key: null,
                         slug: "",
-                        title: "", content: ""}}
-                        /> 
-                    ) : 
-                    <Redirect to="/login"/>
+                        title: "",
+                        content: ""
+                      }
+                    })
+                    // this.state.isAuthenticated ? (
+                    // <PostForm addNewPost={this.addNewPost}
+                    //   post={{
+                    //     key: null,
+                    //     slug: "",
+                    //     title: "", content: ""}}
+                    //     /> 
+                    // ) : 
+                    // <Redirect to="/login"/>
                   )}
                 />
                 <Route
                     path="/edit/:postSlug"
                     render={(props) => {
+ 
                       const post = this.state.posts.find(
                         post => post.slug === props.match.params.postSlug);
-                      if (post && this.state.isAuthenticated) {
-                        return (<PostForm
-                        updatePost={this.updatePost} 
-                        post={post} />
-                        );
-                      } else if (post && !this.state.isAuthenticated) {
-                        return <Redirect to="/login"/>;
+                      if (post) {
+                        return this.renderAuthRoute(PostForm, {
+                          updatePost: this.updatePost,
+                          post
+                        });
                       } else {
                         return <Redirect to="/" />;
                       }
+                      // if (post && this.state.isAuthenticated) {
+                      //   return (<PostForm
+                      //   updatePost={this.updatePost} 
+                      //   post={post} />
+                      //   );
+                      // } else if (post && !this.state.isAuthenticated) {
+                      //   return <Redirect to="/login"/>;
+                      // } else {
+                      //   return <Redirect to="/" />;
+                      // }
                     }}
                 />
+                <Route 
+                    exact path="/newUser"
+                    render={() => {
+                      return <NewUser createNewUser={this.createNewUser} />
+                    }}
+                  />
                 <Route component={NotFound}/>
               </Switch>
           </div>
@@ -168,22 +173,4 @@
  }
 
  export default App;
-
-//  {
-//   id: 1,
-//   slug: "bruce-lee",
-//   title: "Bruce Lee and the Kung Fu Explosion",
-//   content: "In this day of diversity and Chinese wuxia freely available on Netflix..."
-//  },
-//  {
-//   id: 2,
-//   slug: "jackie-chan",
-//   title: "Jackie Chan, Kung Fu Komedian",
-//   content: "What came first, the movie or the outtake?"
-//  },
-//  {
-//   id: 3,
-//   slug: "jet-li",
-//   title: "Jet Li's Dignified Assassin",
-//   content: "Charisma takes many forms. Jet Li's charimsa is of the quiet kind..."
-//  },
+ 

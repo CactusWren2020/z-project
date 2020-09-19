@@ -2,6 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import Quill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import ImageForm from "./ImageForm";
 
 class PostForm extends React.Component {
 
@@ -44,7 +45,7 @@ class PostForm extends React.Component {
             return <Redirect to="/" />;
         }
         return (
-            
+        <>
             <form className="container" onSubmit={this.handleAddNewPost}>
                 <h1>Add a New Post</h1>
                 <p>
@@ -66,13 +67,13 @@ class PostForm extends React.Component {
                 <p>
                     <label htmlFor="form-content">Content: </label>
                 </p>
-                <Quill 
+                <Quill
                     defaultvalue={this.state.post.content}
                     onChange={(content, delta, source, editor) => {
-                        this.setState({ 
+                        this.setState({
                             post: {
                                 ...this.state.post,
-                                content: editor.getContents() 
+                                content: editor.getContents()
                             }
                         });
                     }}
@@ -80,7 +81,10 @@ class PostForm extends React.Component {
                 <p>
                     <button type="submit">Save</button>
                 </p>
+                
             </form>
+            <ImageForm />
+        </>
         );
     }
 }

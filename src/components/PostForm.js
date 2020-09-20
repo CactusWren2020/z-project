@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import Quill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import firebase from "firebase";
-
+import GetUser from "./GetUser"
 // import ImageForm from "./ImageForm";
 
 class PostForm extends React.Component {
@@ -127,6 +127,7 @@ class PostForm extends React.Component {
                 {this.state.post.fileName && <img src={this.state.post.fileName} className="img" alt="image" /> }
             {/* uses state value to display pic */ }
         </form>
+        <GetUser />
         </>
         );
     }

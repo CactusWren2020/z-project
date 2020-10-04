@@ -1,8 +1,13 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A Create-React-App based blog.
 
-## Available Scripts
+Features:
+1. Display blog posts
+2. Editable posts
+3. Upload and display pictures
+4. Create, authenticate, keep track of users
+5. Hooked into Firebase
 
-In the project directory, you can run:
+Much of this is based on Zack Gordon's React Book, but I added the image upload and the user creation features. And chose the pictures, although I'm not responsible for the content some users uploaded!
 
 ### `npm start`
 

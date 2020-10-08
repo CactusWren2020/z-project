@@ -61,9 +61,10 @@ class PostForm extends React.Component {
                 storageRef.getDownloadURL().then(fileURL =>  { 
                     console.log(fileURL);
                     const stateCopy = this.state.post;
-                    this.state.post.fileName = fileURL;
+                    // this.state.post.fileName = fileURL;
                     this.setState({
-                        post: stateCopy
+                        post: stateCopy,
+                        fileName: fileURL
                         })
                     }
                 );  
@@ -124,7 +125,7 @@ class PostForm extends React.Component {
              <p>
                 {!this.state.post.fileName && <button type="submit">Submit</button>}
             </p>
-                {this.state.post.fileName && <img src={this.state.post.fileName} className="img" alt="image" /> }
+                {this.state.post.fileName && <img src={this.state.post.fileName} className="img" alt={this.state.post.fileName} /> }
             {/* uses state value to display pic */ }
         </form>
         <GetUser />

@@ -7,7 +7,7 @@ const Posts = ({posts, deletePost, isAuthenticated}) => {
         <article className="posts container">
             
 
-            <img src={process.env.PUBLIC_URL + "nitro.webp"}/>
+            <img src={process.env.PUBLIC_URL + "nitro.webp"} alt="Dog Fu Showdown"/>
             <h1>Posts</h1>
             <ul>
                 {posts.length < 1 && (<li key="empty">No posts!</li>)}
